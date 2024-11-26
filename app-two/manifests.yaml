@@ -1,0 +1,62 @@
+---
+# Source: app-two/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-two-content
+data:
+  index.html: |-
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>prod</title>
+    </head>
+    <body>
+
+    <h1>prod</h1>
+
+    </body>
+    </html>
+---
+# Source: app-two/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-two
+  name: app-two
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-two
+  template:
+    metadata:
+      labels:
+        app: app-two
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - general-spot
+      containers:
+      - image: public.ecr.aws/nginx/nginx:1.27.2
+        name: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: content
+          readOnly: true
+      tolerations:
+      - effect: NoSchedule
+        key: general-spot
+        operator: Equal
+        value: "true"
+      volumes:
+      - configMap:
+          name: app-two-content
+        name: content
