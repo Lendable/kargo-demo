@@ -12,6 +12,15 @@ spec:
       labels:
         app: kargo-demo
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - general-spot
       containers:
       - image: public.ecr.aws/nginx/nginx:1.27.2
         name: nginx
@@ -19,6 +28,11 @@ spec:
         - mountPath: /usr/share/nginx/html
           name: content
           readOnly: true
+      tolerations:
+      - effect: NoSchedule
+        key: general-spot
+        operator: Equal
+        value: "true"
       volumes:
       - configMap:
           name: kargo-demo-content
