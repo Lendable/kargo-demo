@@ -4,6 +4,7 @@ metadata:
   name: kargo-demo
   labels:
     app: kargo-demo
+    foo: bar
 spec:
   replicas: 1
   selector:
