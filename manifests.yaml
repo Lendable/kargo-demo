@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   labels:
     app: kargo-demo
-    foo: bar
   name: kargo-demo
 spec:
   replicas: 1
