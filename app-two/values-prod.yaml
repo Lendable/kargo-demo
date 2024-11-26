@@ -1,0 +1,6 @@
+---
+env: prod
+deployment:
+  replicas: 2
+  nginx:
+    image_tag: 1.27.2 
