@@ -22,7 +22,7 @@ spec:
                 values:
                 - general-spot
       containers:
-      - image: public.ecr.aws/nginx/nginx:1.27.2
+      - image: public.ecr.aws/nginx/nginx:1.25.2
         name: nginx
         volumeMounts:
         - mountPath: /usr/share/nginx/html
